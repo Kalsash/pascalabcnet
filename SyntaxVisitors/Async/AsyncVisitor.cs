@@ -56,7 +56,6 @@ namespace SyntaxVisitors
 				MainVisitor.Accept(pd);
 				if (!MainVisitor.flag)
 				{
-					pd.proc_header.IsAsync = false;
                     IsAsync = false;
                     return;
 				}

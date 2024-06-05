@@ -13337,8 +13337,19 @@ namespace PascalABCCompiler.TreeConverter
 		
         public override void visit(SyntaxTree.procedure_definition _procedure_definition)
         {
-            // SSM 20.07.13 если это - узел с коротким определением функции без типа возвращаемого значения, то вывести этот тип
             var fh = (_procedure_definition.proc_header as SyntaxTree.function_header);
+            // SSM 05.06.24
+            if (_procedure_definition.proc_header.IsAsync)
+            {
+                // возвращает void, Task, Task<TResult>
+                // В C# еще и любой тип, имеющий GetAwaiter, но это мы опустим
+                var errRetValue = true;
+                if (fh == null) // то это процедура и всё хорошо
+                    errRetValue = false;
+                //if (fh.return_type)
+                fh.return_type = fh.return_type;
+            }
+            // SSM 20.07.13 если это - узел с коротким определением функции без типа возвращаемого значения, то вывести этот тип
             if (fh != null && fh.return_type == null)
             {
                 var bl = _procedure_definition.proc_body as SyntaxTree.block;
